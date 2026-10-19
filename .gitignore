@@ -1,0 +1,16 @@
+node_modules/
+www/
+ios/
+*.ipa
+*.xcarchive
+.DS_Store
+.env
+.env.*
+!*.example
+*.p8
+*.p12
+*.mobileprovision
+*.cer
+*.key
+*.pem
+__pycache__/

@@ -1,0 +1,21 @@
+{
+  "name": "gloria-esser-teaching-tool",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Gloria Esser Teaching Tool \u2014 Build 11, offline-first family connection TestFlight pilot.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node tests/math.test.js && node tests/cloud.test.js && node tests/storage-crypto.test.cjs && node tests/native-share.test.cjs && node tests/family-build11.test.cjs",
+    "test:package": "node scripts/verify-package.mjs"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/ios": "^8.0.0",
+    "@capacitor/filesystem": "^8.1.4",
+    "@capacitor/share": "^8.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0",
+    "esbuild": "^0.25.0"
+  }
+}

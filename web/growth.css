@@ -1,0 +1,61 @@
+/* Gloria Esser Teaching Tool Build 4 · additions to the existing v3 interface */
+.growth{--accent:#0a817f;--accent-soft:#e4f6f2;--gold-soft:#fff6e8;--pink-soft:#fff2ed;--purple-soft:#f1edfb;line-height:1.55}
+.growth *{box-sizing:border-box}
+.growth .growth-kicker{color:#087e7b;letter-spacing:1.4px;text-transform:uppercase;font-weight:800;font-size:10px}
+.growth h2{font-size:26px;line-height:1.23;margin:8px 0;color:#203b50;letter-spacing:-.65px}
+.growth h3{font-size:17px;color:#243e52;margin:0 0 8px}
+.growth p{line-height:1.65}
+.growth .growth-lead{max-width:720px;color:#526b7a;font-size:13px;margin:4px 0 18px}
+.growth .growth-banner{padding:22px 26px;border-radius:18px;display:flex;justify-content:space-between;align-items:center;gap:18px;margin:0 0 18px;background:linear-gradient(115deg,#1b4159,#1a6474);color:#fff}
+.growth .growth-banner h2{color:#fff;font-size:25px}.growth .growth-banner p{color:#d8eeee;margin:6px 0 0;max-width:670px}
+.growth .growth-banner .growth-kicker{color:#a4eadb}
+.growth .growth-banner .growth-banner-symbol{font-size:55px;opacity:.53;flex:none}
+.growth .growth-alert{background:#fff9ed;border:1px solid #f1dcaa;padding:11px 15px;border-radius:12px;color:#775c24;font-size:12px;margin:0 0 18px}
+.growth .growth-card{background:white;border:1px solid #dde8ec;border-radius:16px;padding:20px;box-shadow:0 4px 24px #1c39500a;min-width:0}
+.growth .growth-card h3{margin-bottom:5px}.growth .growth-card p{font-size:12px;color:#526b7a;margin:4px 0 13px}
+.growth .growth-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.growth .growth-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.growth .growth-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.growth .growth-stat{border-radius:13px;background:#f0f7f8;padding:15px;border:1px solid #dfe9ea}
+.growth .growth-stat span{display:block;font-size:11px;color:#617785}
+.growth .growth-stat strong{font-size:26px;letter-spacing:-.8px;color:#244459}
+.growth .growth-control{display:grid;gap:5px;color:#365468;font-size:12px;font-weight:730}
+.growth input,.growth select,.growth textarea{width:100%;border:1px solid #d4e0e4;border-radius:10px;background:white;padding:10px 11px;color:#274050;font-size:13px;min-width:0}
+.growth textarea{resize:vertical;line-height:1.6;min-height:90px}
+.growth input:focus-visible,.growth select:focus-visible,.growth textarea:focus-visible,.growth button:focus-visible{outline:3px solid #68c1b3;outline-offset:2px}
+.growth .growth-button{border:1px solid #cbdce0;border-radius:10px;padding:9px 14px;min-height:39px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:750;font-size:12px;cursor:pointer;background:#fff;color:#295266;text-decoration:none}
+.growth .growth-button:hover{background:#f4faf9}
+.growth .growth-button.primary{background:#12877e;color:#fff;border-color:#12877e}.growth .growth-button.primary:hover{background:#0b6b65}
+.growth .growth-button.dark{background:#1c4056;color:white;border-color:#1c4056}
+.growth .growth-button:disabled{opacity:.5;cursor:not-allowed}
+.growth .growth-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.growth .growth-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.growth .growth-note{font-size:11px!important;color:#617c87!important;line-height:1.55!important}
+.growth .growth-pill{font-size:10px;font-weight:800;color:#176c6b;background:#e3f3ef;padding:5px 9px;border-radius:99px;white-space:nowrap}
+.growth .growth-pill.sand{background:#fef0d8;color:#8a5618}
+.growth .growth-pill.purple{background:#f1edfb;color:#5f4a9b}
+.growth .growth-list{list-style:none;padding:0;margin:12px 0;display:grid;gap:9px}
+.growth .growth-list li{border-left:3px solid #8cc5ba;background:#f7fafa;padding:9px 11px;font-size:12px;color:#3a5260}
+.growth .growth-question{padding:15px 0;border-bottom:1px solid #e8eff0}
+.growth .growth-question:last-child{border-bottom:0}
+.growth .growth-question label{display:block;font-weight:700;font-size:14px;color:#264356;margin-bottom:6px}
+.growth .growth-question input{max-width:310px}
+.growth .growth-score{font-size:32px;font-weight:850;color:#1a6170;letter-spacing:-.8px}
+.growth .growth-bar{height:10px;background:#e7eff0;border-radius:99px;overflow:hidden}
+.growth .growth-bar>span{display:block;height:100%;background:#188c83;border-radius:99px}
+.growth .growth-result{border:1px solid #e1e9e9;border-radius:10px;padding:12px;margin:9px 0}
+.growth .growth-result.right{border-left:4px solid #28a07d}.growth .growth-result.wrong{border-left:4px solid #cb8255}
+.growth .growth-result p{margin:4px 0;font-size:12px}
+.growth .growth-source{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid #e5eded;padding-top:12px;margin-top:16px;font-size:11px;color:#617681}
+.growth .growth-source a{color:#0a6f70}
+.growth .growth-template{position:relative;display:flex;flex-direction:column;gap:9px}
+.growth .growth-template small{color:#6b7f8a;font-size:11px}
+.growth .growth-template .growth-button{margin-top:auto}
+.growth .growth-paper{background:#fffcf7;border:1px solid #e7ddcc;border-radius:13px;padding:20px;white-space:pre-wrap;word-break:break-word;line-height:1.7;font-size:13px;color:#304a57}
+.growth .growth-moment{border-radius:15px;padding:18px;border:1px solid #e1e4ea;background:linear-gradient(120deg,#fff,#fbf8ff);margin-bottom:11px}
+.growth .growth-moment p{white-space:pre-wrap;font-size:12px;color:#456173;margin:8px 0}
+.growth .growth-private{display:inline-flex;align-items:center;gap:5px;color:#775d9d;background:#f4effb;font-size:10px;border-radius:99px;padding:5px 9px;font-weight:780}
+.growth .growth-save-status{font-size:12px;color:#097b6d;margin-top:8px}
+@media(max-width:980px){.growth .growth-4{grid-template-columns:repeat(2,minmax(0,1fr))}.growth .growth-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:660px){.growth .growth-2,.growth .growth-3,.growth .growth-4{grid-template-columns:1fr}.growth .growth-banner{padding:19px}.growth .growth-banner-symbol{display:none}.growth .growth-card{padding:15px}.growth h2{font-size:22px}}
+@media print{.growth button,.growth .growth-actions,.growth .growth-alert,.growth .growth-banner-symbol{display:none!important}.growth .growth-card,.growth .growth-moment{break-inside:avoid;box-shadow:none}.growth{color:#000}}

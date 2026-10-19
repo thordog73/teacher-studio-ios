@@ -1,0 +1,13 @@
+{
+  "appId": "com.frontofus.teacherstudio",
+  "appName": "Gloria Esser Teaching Tool",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "automatic",
+    "preferredContentMode": "mobile",
+    "scrollEnabled": true
+  },
+  "server": {
+    "iosScheme": "capacitor"
+  }
+}

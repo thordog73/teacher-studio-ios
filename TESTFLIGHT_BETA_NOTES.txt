@@ -1,0 +1,15 @@
+Gloria Esser Teaching Tool — Build 11 Family Connect (iOS 1.1.0)
+
+Pilot uses FICTIONAL accounts and invented school records only.
+
+Teacher tasks:
+- Explore the simplified Family Connect home.
+- Create a fictional class and student, generate a one-time email-bound invitation code, and share the code outside the app (delivery not confirmed).
+- Post a fictional announcement and an assignment; release and revoke sample grades.
+- Verify native file sharing and restoration of encrypted TEACHER-OWNED library backups.
+
+Parent tasks:
+- With a separate fictional sign-in account on a second device, join using an invited code in the configured Supabase pilot.
+- Read approved classroom work, reply privately where enabled, and see only released grades for the linked fictional child.
+
+IMPORTANT: Offline teacher/parent role switching is ONLY a one-device demo; no real parent receives it. Build 11 is NOT deployed or authorized for real children or educational records. Codemagic signing and a real-device iPhone build are pending.
