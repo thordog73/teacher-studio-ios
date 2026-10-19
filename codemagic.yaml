@@ -48,7 +48,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 120
     integrations:
-      app_store_connect: TeacherStudioASC # Must match integration name in Codemagic
+      app_store_connect: ten-minute-wins-apple # Must match integration name in Codemagic
     environment:
       ios_signing:
         distribution_type: app_store
