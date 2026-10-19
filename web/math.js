@@ -1,4 +1,4 @@
-/* Gloria Esser Teaching Tool math engine v1.0 — original, deterministic, dependency free.
+/* Teacher Studio math engine v1.0 — original, deterministic, dependency free.
    No AI-generated runtime answers. All answers use integer rational arithmetic. */
 (function(global){'use strict';
 function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}

@@ -1,3 +1,19 @@
+# Build 12 — October 2026
+
+- Packages **UPDATE.cmd** for a short Windows upload command from any extracted folder, with a release file list and a normal push to the existing GitHub repository.
+
+- Adds Today & families as the starting screen with Attendance, Going home, Schoolwork & grades, Dates & forms, Messages & calls, and Help & school info.
+- Adds teacher follow-up views for own actions, waiting work and completed requests, ordered by requested date. The full queue keeps every item reachable.
+- Adds local practice attendance, one-day dismissal, call, support and conference workflows with explicit routing and persistent status history.
+- Keeps the confirmed plan while a request is pending. Verified early pickup uses one attendance request and updates only that day's plan.
+- Distinguishes call attempts, voicemail, contact, follow-up and resolution. Teacher call cards show linked family callback preferences when provided.
+- Reuses classroom message records, adds explicit audience and acknowledgment/reply/call requirements, and returns an answered family reply task to the teacher.
+- Adds per-child and per-guardian form responses, with differing guardian responses shown to the teacher for follow-up.
+- Adds thirty editable starter FAQs with actions. Shared school information and calendar entries reuse School Hub; classroom FAQ answers remain scoped and deleted starters stay deleted.
+- Reuses original assignments and released grades; missing work is explicitly marked, never inferred from an absent score.
+- Retains Family Connect setup, the teacher tool collection, encryption and native sharing. New family practice records remain outside teacher-material backups.
+- Regenerates an offline single-file demo and keeps the existing iOS source/pipeline under version 1.2.0. No signed binary or Apple submission is included.
+
 # Build 8 — October 2026
 
 - Preserves all Build 7 teaching, classroom, school hub, math, family demo, showcase and visual lesson workflows.

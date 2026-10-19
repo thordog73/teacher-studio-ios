@@ -1,4 +1,4 @@
-# Gloria Esser Teaching Tool — Privacy Policy Draft (requires review and a public hosted URL)
+# Teacher Studio — Privacy Policy Draft (requires review and a public hosted URL)
 
 This draft describes the **TestFlight development prototype**. It is **not** a final legal policy for a production school/family app.
 

@@ -1,4 +1,4 @@
-/* Gloria Esser Teaching Tool Build 5 — original visual fraction lab & classroom kit library.
+/* Teacher Studio Build 5 — original visual fraction lab & classroom kit library.
    This module is intentionally offline, scoped per fictional classroom, and adds no student records. */
 (()=>{'use strict';
 const KEY='teacherstudio_evolution_v5';

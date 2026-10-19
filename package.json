@@ -1,11 +1,13 @@
 {
-  "name": "gloria-esser-teaching-tool",
-  "version": "1.1.0",
+  "name": "teacher-studio-family-connect",
+  "version": "1.2.0",
   "private": true,
-  "description": "Gloria Esser Teaching Tool \u2014 Build 11, offline-first family connection TestFlight pilot.",
+  "description": "Teacher Studio Build 12, Family Desk offline practice and optional Family Connect pilot source.",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/math.test.js && node tests/cloud.test.js && node tests/storage-crypto.test.cjs && node tests/native-share.test.cjs && node tests/family-build11.test.cjs",
+    "build:standalone": "node scripts/build-standalone.mjs",
+    "test": "node tests/math.test.js && node tests/cloud.test.js && node tests/storage-crypto.test.cjs && node tests/native-share.test.cjs && node tests/family-build11.test.cjs && npm run test:communication",
+    "test:communication": "node tests/communication-model.test.cjs && node tests/communication-ui.test.cjs",
     "test:package": "node scripts/verify-package.mjs"
   },
   "dependencies": {

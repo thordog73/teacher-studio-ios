@@ -1,73 +1,90 @@
-# Codemagic-ready source package — Gloria Esser Teaching Tool
+# Teacher Studio — Build 12: Family Desk (iOS source 1.2.0)
 
-**Start here:** [`UPLOAD_TO_CODEMAGIC_WINDOWS.md`](UPLOAD_TO_CODEMAGIC_WINDOWS.md). Run `python scripts/ci-preflight.py` before pushing. Codemagic workflows: `ios-compile-check` (unsigned) followed by `ios-testflight` (signed upload).
+**Remember Why You Teach.** Build 12 adds a **Today** home for families and an action queue for teachers. It organizes routine questions, dated attendance and dismissal requests, callbacks, announcements and editable FAQs while retaining Family Connect, lesson tools, fraction practice, released-grade controls and teacher-owned encrypted backups.
 
-This package includes a corrected Capacitor 8 CocoaPods iOS generation command, matching bundle ID and marketing version checks, and source for Build 11. **It has not yet passed a macOS Xcode build or uploaded to TestFlight.** Its parent connection must only be tested with fictional data until backend permissions are validated.
+## Upload this build from Windows
 
----
+Extract the complete ZIP into any folder, then double-click **UPDATE.cmd**. From Command Prompt opened in that folder, the only command is:
 
-# Gloria Esser Teaching Tool — Build 11: Family Connect (iOS 1.1.0)
-
-**Remember Why You Teach.** Family Connect is the main landing screen. It helps teachers create a classroom, invite families, share homework and announcements, privately message guardians, and approve individual grade releases. Parents get a simpler view of their own linked classroom and child. The existing Gloria Esser Teaching Tool lesson tools, fractions math engine, library, portfolios, School Hub, local storage and encrypted backup features are preserved under **All teacher tools**.
-
-## Read this first
-
-Build 11 is a **functional offline fictional-data demo and an unconfigured source package for an optional connected Supabase pilot**. It has **not** yet been built into a signed iOS `.ipa`, installed on a real iPhone, uploaded to TestFlight, provisioned with a cloud account, tested against a live multi-account database, audited for security, or approved by a school. Never enter actual student information, parent data, real grades, student images or identifying communications. In the offline demo, the Teacher/Parent switch is **not authentication**; it only shows different mock views on the same device.
-
-## One-minute demo
-
-1. Open `standalone-demo.html` from the ZIP, or open `web/index.html` through localhost / HTTPS.
-2. Family Connect starts with a fictional class, 20 fictional students and one sample guardian.
-3. As teacher, create a **private invitation code** for a fictional email; select **Copy invite message** or **Share invitation**. No email is delivered automatically.
-4. Post an announcement and a homework assignment; use **Review or enter scores** to enter and release a fictional grade.
-5. Switch to **Parent** to preview only the originally linked sample child's permitted information. This is an offline simulation, not a secure two-device test.
-
-## Live two-device fictional pilot (separate setup required)
-
-1. Create an isolated Supabase project used only for fictional records and test email accounts.
-2. Run `supabase/schema.sql`, then `supabase/migrate_build11_guardian_revocation.sql`. On a new project, migration `migrate_v7_release_gate.sql` is already represented in the current schema; for an older schema, review that migration first.
-3. Configure email OTP with `{{ .Token }}`, an approved SMTP sender, and restrict signup to pilot participants. Use **two different fictional-guardian email accounts**, plus one teacher account.
-4. Under Codemagic's app environment variables, optionally set **`TEACHER_STUDIO_SUPABASE_URL`** to `https://yourproject.supabase.co` and **`TEACHER_STUDIO_SUPABASE_PUBLISHABLE_KEY`** to the **public** project key. `scripts/build.mjs` embeds **only these public identifiers**, so parents don't have to enter service settings. **Never include `service_role`, `sb_secret_`, SMTP credentials, `.p8` signing keys or any private secrets in the app.**
-5. Teachers sign in by email, create a fictional class, add a fictional student, generate a one-time invitation and **send the code through an approved channel**. The app does not send invitations on its own.
-6. Each fictional guardian signs in with the **same email the teacher invited** and claims the code. Teachers can revoke a guardian's access or cancel a pending invitation through SQL functions that check authenticated classroom ownership.
-7. Verify direct REST requests for guardian A cannot see guardian B's grades, messages, submissions or files, before and after release/revocation. Instructions in `PILOT_SECURITY_TESTS.md`.
-8. Do not proceed to any real-school pilot without guardian authorization verification beyond email possession, district approval, data-processing/privacy review, retention and deletion controls, audit logging, moderation, backups and an independent security review.
-
-**Important:** The server, not a role-switching UI control, enforces row access. The new app can suggest a role for navigation based on membership; that is never itself an authorization mechanism. Messages are fetched on opening or selecting **Refresh**, not delivered through background push notifications. Free cloud tiers don't guarantee reliable service or delivery.
-
-## Build and TestFlight
-
-The existing GitHub → Codemagic `codemagic.yaml` workflows are retained:
-
-- `ios-compile-check`: native unsigned simulator compilation, requires Codemagic macOS builder.
-- `ios-testflight`: native distribution signature and automatic TestFlight upload, requires registered Bundle ID, a Codemagic integration named `TeacherStudioASC`, Apple signing and app record.
-
-App version **1.1.0**, bundle ID default `com.frontofus.teacherstudio` (unreserved). Exact identifiers in `capacitor.config.json`, `codemagic.yaml` and App Store Connect must match. Follow `TESTFLIGHT_STEPS_WINDOWS.md`.
-
-## Local verification
-
-```bash
-npm run test
-npm run test:package
-python tests/family-browser.py  # Optional Chromium mounted DOM test; navigations may be blocked in restricted environments
+```cmd
+UPDATE.cmd
 ```
 
-Tests pass for the 67,200 math questions, encrypted teacher data backups, mock cloud calls, family rendering boundaries, simulated invitation creation, announcements/homework and demo parent visibility. A passing local test is NOT a live cross-account RLS certification, App Store approval or physical iPhone validation.
+The included launcher finds its own folder, downloads the current `main` branch of **thordog73/teacher-studio-ios** into a temporary working folder, copies the files listed in `UPDATE-FILES.txt`, commits the update when needed and pushes it to the same repository. Existing Git history is retained. It opens Codemagic after a successful upload; select **main → ios-testflight** to start the signed build.
 
-## Project structure
+Git for Windows must already be available, as with the other app upload commands. Git may use its normal sign-in prompt. Dependency installation, tests and iOS compilation run in Codemagic. The launcher stops if a required step fails and leaves the temporary checkout available for diagnosis.
 
-- `web/` — complete, preserved offline Gloria Esser Teaching Tool plus new `family.js` / `family.css`.
-- `web/pilot-config.js` — empty default public configuration, no secret keys.
-- `supabase/` — existing locked-down schema and new teacher-controlled revocation/cancellation RPCs.
-- `tests/` — original tests and Build 11 privacy/layout tests.
-- `scripts/` — Capacitor web-to-native bundling, app icons and iOS Info.plist generation.
-- `codemagic.yaml` — existing App Store pipeline.
-- `PILOT_SECURITY_TESTS.md` — required two-account tests before any real usage.
+The release file list prevents unrelated files placed next to the app from being swept into the update. Keep the complete extracted package together; the launcher checks that the listed files are present before it uploads anything.
 
-**Product policy:** Teachers determine what they teach and what to release. Do not automatically publish a grade, send a message in a teacher's name, or imply that a guardian was verified merely because they possess an email account.
+## Open the offline demo
 
-## Dedication and brand continuity
+Open `standalone-demo.html` from this source package in a browser. The separately supplied file `teacher-studio-build12-demo.html` contains the same application. A phone's file-preview window may display the file without running it; open it in a browser that supports local HTML, or serve `web/` through localhost/HTTPS.
 
-The public name is **Gloria Esser Teaching Tool** (26 characters). The iOS home-screen label is **Gloria Esser** to fit on the icon. Tagline: **Remember Why You Teach.** Named in recognition of Gloria Esser's 50 years teaching.
+1. Start on **Today** as the teacher and explore the queue.
+2. Switch to **Parent** and select the linked fictional child. Open a quick topic or FAQ.
+3. Request a change for a specific dismissal date. The confirmed plan stays visible while the request is pending.
+4. Switch back to the teacher to review the practice request and try the callback and announcement workflows.
+5. Use **All teacher tools** to reopen the existing classroom, math, materials and backup features.
 
-The internal iOS bundle ID `com.frontofus.teacherstudio`, Codemagic integration alias `TeacherStudioASC`, `teacherstudio_*` local data keys, and `.tsbackup` backup format remain unchanged for backward compatibility. This is a brand change, not a new app identity or a claim of live family synchronization.
+The role switch is a one-device demonstration, not authentication. Use fictional children, families, contact details and school procedures. A new Family Desk request is saved locally: another device does not receive it, and a practice review is not a real school approval.
+
+## What changed
+
+- **A simpler daily home:** a selected child, the relevant date, the confirmed dismissal plan and requests needing attention.
+- **A teacher action queue:** an explicit next action and owner, with waiting and resolved work distinguished from new messages.
+- **Dated dismissal practice:** a usual plan plus date-specific exceptions; pending changes do not silently replace the confirmed plan.
+- **Pickup verification practice:** recording an intended adult or a code is separate from checking that the adult is authorized.
+- **Callbacks:** direction, attempts, voicemail, reaching someone and resolution are distinct states. The phone indicator has a text label.
+- **Announcements and FAQs:** audience and required response are explicit; reading a notice is different from acknowledging it. Editable answers lead to the relevant action.
+
+Details and practical review scenarios are in `docs/BUILD_12_FAMILY_DESK.md`.
+
+## Existing connected Family Connect pilot
+
+The multi-file source retains the optional Supabase account, invitation, assignment, released-grade and messaging features from Build 11. **The new Family Desk operational requests have no remote delivery or school approval service in this build.** Configuring the existing connected pilot does not turn those new local practice records into shared operational records.
+
+For a fictional two-device test of the existing Family Connect features:
+
+1. Create an isolated Supabase project and run `supabase/schema.sql`, then `supabase/migrate_build11_guardian_revocation.sql`. An older database may also need the existing `migrate_v7_release_gate.sql`; the current schema already includes that release gate.
+2. Configure email OTP and test accounts. Use the exact fictional guardian email that the teacher invited, with a separate teacher account.
+3. Set `TEACHER_STUDIO_SUPABASE_URL` and `TEACHER_STUDIO_SUPABASE_PUBLISHABLE_KEY` in the build environment, or use the multi-file app's settings. Only the public URL and public publishable/anon key belong in the client. Keep private service keys and signing credentials outside the app.
+4. Create a fictional classroom, student and email-bound invitation. Copy or share the invitation through a channel you choose; the app does not deliver invitation email automatically.
+5. Follow `PILOT_SECURITY_TESTS.md` for the existing cross-account release and revocation checks. The standalone HTML always stays in demo mode, even if its browser has saved connected settings.
+
+The connected client fetches messages on opening or **Refresh**; there is no background push delivery. The source package is for fictional testing and has not been validated for real student records.
+
+## Build and local verification
+
+```bash
+npm install --no-fund --no-audit
+npm run test
+npm run test:package
+npm run build:standalone
+npm run build
+```
+
+- `npm run test` runs the inherited math, cloud mock, encryption, native-share and family-visibility tests, followed by the new communication model and UI tests.
+- `npm run test:communication` runs just the new communication tests.
+- `npm run test:package` checks the Today hook, ordered assets, service-worker asset list, app identity, retained iOS workflow and complete, safe Windows update file entries.
+- `npm run build:standalone` regenerates `standalone-demo.html` directly from `web/index.html`, inlining local CSS and scripts in order. It requires no dependency installation and includes the browser native-sharing stub.
+- `npm run build` creates `www/` and bundles the existing Capacitor Filesystem/Share bridge locally. No CDN is needed at runtime.
+
+Source tests and a web build do not establish that an Apple build has compiled or that a native share completed on an iPhone. Historical Python smoke scripts target older screens; the Build 12 communication tests are the current Family Desk gate.
+
+## iPhone / TestFlight source
+
+The app identifier remains **`com.frontofus.teacherstudio`**. `scripts/prepare_ios.py` now reads **1.2.0** from `package.json` and retains the dynamic build number. Capacitor dependencies, iOS sharing configuration and the GitHub → Codemagic pipeline are preserved.
+
+- `ios-compile-check` creates and compiles an unsigned iOS Simulator application on a Codemagic macOS builder.
+- `ios-testflight` uses the existing `TeacherStudioASC` integration and signing configuration to archive and submit to TestFlight when run in the configured account.
+
+Follow `TESTFLIGHT_STEPS_WINDOWS.md` for the existing pipeline setup. This package contains source and an offline HTML demo; no signed `.ipa`, physical iPhone validation or TestFlight upload is claimed.
+
+## Files and preserved behavior
+
+- `web/communication-model.js`, `web/communication.js`, `web/communication.css` and `web/faq-seed.js` — Family Desk practice state, views and starter FAQs.
+- `web/family.js`, `web/cloud.js` and `supabase/` — retained Family Connect pilot and server access rules.
+- `web/storage.js` and `scripts/native-bridge.mjs` — retained teacher-material encryption, restore and native sharing.
+- `docs/BUILD_12_FAMILY_DESK.md` — workflow descriptions and known boundaries.
+
+Teachers still choose when to release individual grades. Teacher-owned backup files retain the existing encrypted `.tsbackup` format and exclude student records; they do not back up the new family communication practice records. Saving or sharing a backup does not by itself confirm that an off-device copy exists.

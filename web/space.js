@@ -1,4 +1,4 @@
-/* Gloria Esser Teaching Tool v3 — Local-only personalized classroom pages.
+/* Teacher Studio v3 — Local-only personalized classroom pages.
    Fictional classroom demo. NO online publishing or sharing of student images.
    Parent visibility here is a same-browser fictional preview, never a cloud permission check.
 */

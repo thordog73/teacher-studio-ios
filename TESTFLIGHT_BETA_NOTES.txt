@@ -1,15 +1,27 @@
-Gloria Esser Teaching Tool — Build 11 Family Connect (iOS 1.1.0)
+Teacher Studio — Build 12 Family Desk (iOS source 1.2.0)
 
-Pilot uses FICTIONAL accounts and invented school records only.
+What is new
+Today gives families six quick topics and gives teachers an action queue. Try a dated dismissal change, a callback, an announcement requiring acknowledgement, and an editable FAQ that opens the right form. All existing lesson tools, released-grade controls and encrypted teacher-material backups remain available.
 
-Teacher tasks:
-- Explore the simplified Family Connect home.
-- Create a fictional class and student, generate a one-time email-bound invitation code, and share the code outside the app (delivery not confirmed).
-- Post a fictional announcement and an assignment; release and revoke sample grades.
-- Verify native file sharing and restoration of encrypted TEACHER-OWNED library backups.
+Fictional local practice
+Use invented children, guardians and school procedures. The new Family Desk requests, pickup verification, callback history and response indicators are local practice. Switching Teacher/Parent previews the same device; it is not authentication and does not deliver anything to a real family. A pickup code alone does not establish an adult's authorization.
 
-Parent tasks:
-- With a separate fictional sign-in account on a second device, join using an invited code in the configured Supabase pilot.
-- Read approved classroom work, reply privately where enabled, and see only released grades for the linked fictional child.
+Teacher review
+- Check that pending dismissal changes leave the current confirmed plan visible.
+- Log no answer or voicemail and confirm the callback remains open until explicitly resolved.
+- Choose the message audience and whether a response is needed.
+- Edit an FAQ, reopen the parent view and follow its action.
+- Reopen existing classroom, math, grade-release and material-backup tools.
 
-IMPORTANT: Offline teacher/parent role switching is ONLY a one-device demo; no real parent receives it. Build 11 is NOT deployed or authorized for real children or educational records. Codemagic signing and a real-device iPhone build are pending.
+Parent review
+- Select the fictional child and use the Today topics.
+- Request a change for a specific date, then check the practice review status.
+- Distinguish new, needs a reply, call requested and resolved.
+- Read an announcement, then explicitly acknowledge it when required.
+- Confirm that only teacher-released grades are visible.
+
+Existing configured Family Connect pilot
+The inherited Supabase features still support fictional account, invitation, assignment, released-grade and message tests on separate devices after setup. They do not make the new operational Family Desk records synchronize remotely. No background push delivery is included.
+
+Package status
+This is prepared application source plus an offline HTML demo. A signed iOS build, physical iPhone testing and TestFlight upload must be performed in the configured Apple/Codemagic environment; none is claimed by these notes.

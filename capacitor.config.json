@@ -1,6 +1,6 @@
 {
   "appId": "com.frontofus.teacherstudio",
-  "appName": "Gloria Esser Teaching Tool",
+  "appName": "Teacher Studio",
   "webDir": "www",
   "ios": {
     "contentInset": "automatic",

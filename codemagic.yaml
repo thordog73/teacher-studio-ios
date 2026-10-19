@@ -1,9 +1,9 @@
-# Gloria Esser Teaching Tool iOS — App Store Connect / TestFlight. Set exact App Store Connect
+# Teacher Studio iOS — App Store Connect / TestFlight. Set exact App Store Connect
 # integration name and bundle identifier before running a signed workflow.
-# First run ios-compile-check, then ios-testflight. Capacitor 8 explicitly uses CocoaPods for this configuration.
+# First run ios-compile-check, then ios-testflight.
 workflows:
   ios-compile-check:
-    name: Gloria Esser Teaching Tool - iOS compile check (unsigned)
+    name: Teacher Studio - iOS compile check (unsigned)
     instance_type: mac_mini_m2
     max_build_duration: 120
     environment:
@@ -11,16 +11,8 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Validate upload package and build settings
-        script: python3 scripts/ci-preflight.py
-      - name: Print toolchain versions
-        script: |
-          node --version
-          npm --version
-          xcodebuild -version
-          python3 scripts/ci-preflight.py --check-xcode
       - name: Install Capacitor and build dependencies
-        script: npm install --no-fund --no-audit --fetch-retries=3
+        script: npm install --no-fund --no-audit
       - name: Verify inherited code and construct web app
         script: |
           npm run test
@@ -28,7 +20,7 @@ workflows:
           npm run build
       - name: Generate Capacitor iOS application
         script: |
-          npx cap add ios --packagemanager CocoaPods
+          npx cap add ios
           npx cap sync ios
           python3 scripts/prepare_ios.py
       - name: Install iOS pods and attach privacy manifest
@@ -44,11 +36,11 @@ workflows:
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
   ios-testflight:
-    name: Gloria Esser Teaching Tool - Signed iOS TestFlight
+    name: Teacher Studio - Signed iOS TestFlight
     instance_type: mac_mini_m2
     max_build_duration: 120
     integrations:
-      app_store_connect: ten-minute-wins-apple # Must match integration name in Codemagic
+      app_store_connect: TeacherStudioASC # Must match integration name in Codemagic
     environment:
       ios_signing:
         distribution_type: app_store
@@ -57,16 +49,8 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Validate upload package and build settings
-        script: python3 scripts/ci-preflight.py
-      - name: Print toolchain versions
-        script: |
-          node --version
-          npm --version
-          xcodebuild -version
-          python3 scripts/ci-preflight.py --check-xcode
       - name: Install dependencies
-        script: npm install --no-fund --no-audit --fetch-retries=3
+        script: npm install --no-fund --no-audit
       - name: Verify tests and create offline web assets
         script: |
           npm run test
@@ -74,7 +58,7 @@ workflows:
           npm run build
       - name: Generate native iOS source
         script: |
-          npx cap add ios --packagemanager CocoaPods
+          npx cap add ios
           npx cap sync ios
           python3 scripts/prepare_ios.py
       - name: Install pods and apply App Store privacy declaration

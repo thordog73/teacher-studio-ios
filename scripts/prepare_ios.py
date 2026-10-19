@@ -6,12 +6,13 @@ info=base/'Info.plist'
 if not info.exists(): raise SystemExit('Missing generated Capacitor iOS project.')
 # plistlib conversion to binary overwrites formatting but Xcode supports binary property lists.
 with info.open('rb') as f: obj=plistlib.load(f)
-obj['CFBundleDisplayName']='Gloria Esser'
+obj['CFBundleDisplayName']='Teacher Studio'
 obj['NSCameraUsageDescription']='Capture a worksheet or classroom teaching material you choose to add.'
 obj['NSPhotoLibraryUsageDescription']='Choose teaching-related images or artwork from your photo library.'
 obj['UIFileSharingEnabled']=True
 obj['LSSupportsOpeningDocumentsInPlace']=True
-obj['CFBundleShortVersionString']=json.loads(Path('package.json').read_text())['version']
+package_path=Path(__file__).resolve().parent.parent/'package.json'
+obj['CFBundleShortVersionString']=json.loads(package_path.read_text())['version']
 obj['CFBundleVersion']=str(os.environ.get('PROJECT_BUILD_NUMBER','1'))
 with info.open('wb') as f: plistlib.dump(obj,f,fmt=plistlib.FMT_XML)
 # App icon sets may differ; create each size named in the generated asset catalog.

@@ -1,4 +1,4 @@
-/* Gloria Esser Teaching Tool Build 11 — a task-first family connection workspace.
+/* Teacher Studio Build 11 — a task-first family connection workspace.
    View-only: all state changes, validation and server authorization live in app.js/Supabase RLS.
    Fictional demo != authenticated access. No real student or parent data in development pilots. */
 (function (global) {

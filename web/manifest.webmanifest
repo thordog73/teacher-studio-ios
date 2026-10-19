@@ -1,7 +1,7 @@
 {
-  "name": "Gloria Esser Teaching Tool",
-  "short_name": "Gloria Esser",
-  "description": "Free, teacher-led classroom tools and optional private family connection. Remember Why You Teach.",
+  "name": "Teacher Studio",
+  "short_name": "Teacher Studio",
+  "description": "Offline lesson tools and optional private classroom communication",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
