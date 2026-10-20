@@ -15,20 +15,25 @@ workflows:
         script: npm install --no-fund --no-audit
       - name: Verify inherited code and construct web app
         script: |
+          set -euo pipefail
           npm run test
           npm run test:package
           npm run build
       - name: Generate Capacitor iOS application
         script: |
-          npx cap add ios
+          set -euo pipefail
+          npx cap add ios --packagemanager CocoaPods
+          test -f ios/App/Podfile || { echo "Expected CocoaPods project: ios/App/Podfile is missing." >&2; exit 1; }
           npx cap sync ios
           python3 scripts/prepare_ios.py
       - name: Install iOS pods and attach privacy manifest
         script: |
-          cd ios/App && pod install && cd ../..
+          set -euo pipefail
+          (cd ios/App && pod install)
           ruby scripts/attach_privacy.rb
       - name: Compile iPhone Simulator app without signing
         script: |
+          set -euo pipefail
           xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Debug \
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO build
@@ -53,24 +58,30 @@ workflows:
         script: npm install --no-fund --no-audit
       - name: Verify tests and create offline web assets
         script: |
+          set -euo pipefail
           npm run test
           npm run test:package
           npm run build
       - name: Generate native iOS source
         script: |
-          npx cap add ios
+          set -euo pipefail
+          npx cap add ios --packagemanager CocoaPods
+          test -f ios/App/Podfile || { echo "Expected CocoaPods project: ios/App/Podfile is missing." >&2; exit 1; }
           npx cap sync ios
           python3 scripts/prepare_ios.py
       - name: Install pods and apply App Store privacy declaration
         script: |
-          cd ios/App && pod install && cd ../..
+          set -euo pipefail
+          (cd ios/App && pod install)
           ruby scripts/attach_privacy.rb
       - name: Configure App Store signing
         script: |
+          set -euo pipefail
           cd ios/App
           xcode-project use-profiles
       - name: Archive signed IPA
         script: |
+          set -euo pipefail
           cd ios/App
           xcode-project build-ipa --workspace App.xcworkspace --scheme App
     artifacts:

@@ -73,7 +73,9 @@ Source tests and a web build do not establish that an Apple build has compiled o
 
 ## iPhone / TestFlight source
 
-The app identifier remains **`com.frontofus.teacherstudio`**. `scripts/prepare_ios.py` now reads **1.2.0** from `package.json` and retains the dynamic build number. Capacitor dependencies, iOS sharing configuration and the GitHub → Codemagic pipeline are preserved.
+The app identifier remains **`com.frontofus.teacherstudio`**. Both native preparation helpers read **1.2.0** from `package.json` and retain the dynamic build number. Capacitor dependencies, iOS sharing configuration, workflow names and Apple publishing settings are preserved.
+
+The **20 October iOS build correction** explicitly generates a CocoaPods project for the existing Xcode workspace commands. Both workflows stop when a required command fails, and Pod installation runs in its own directory without moving the following privacy step out of the repository root. This corrects the reported missing `Podfile` and cascading privacy-script path error.
 
 - `ios-compile-check` creates and compiles an unsigned iOS Simulator application on a Codemagic macOS builder.
 - `ios-testflight` uses the existing `TeacherStudioASC` integration and signing configuration to archive and submit to TestFlight when run in the configured account.

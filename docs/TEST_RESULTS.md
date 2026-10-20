@@ -1,6 +1,6 @@
 # Teacher Studio Build 12 — Verification
 
-Date: 2026-10-19 · application version 1.2.0
+Application verification: 2026-10-19 · iOS build correction: 2026-10-20 · application version 1.2.0
 
 ## Current automated results
 
@@ -12,11 +12,23 @@ Date: 2026-10-19 · application version 1.2.0
 - The School Hub FAQ review verifies classroom scope, school-shared legacy answers, role/mode checks, and starter deletion surviving a reload.
 - Packaging verification confirms source ordering, the new static assets, Today navigation, retained app identity, native backup/iOS pipeline wiring and the Windows update file list.
 - The standalone generator and Capacitor web bundler both complete. The standalone contains ten inline stylesheets, sixteen application scripts plus its offline bootstrap, an embedded icon, an empty pilot configuration and the browser native-sharing stub.
-- Byte comparison confirms the inherited math engine, encrypted storage module, cloud client, native sharing source, Supabase schema/access migration, Capacitor identity and Codemagic pipeline were not modified.
+- Byte comparison confirms the inherited math engine, encrypted storage module, cloud client, native sharing source, Supabase schema/access migration and Capacitor identity were not modified.
+
+## iOS build correction — 20 October
+
+The supplied Codemagic screenshot reports a missing `Podfile` after native project generation. The installed Capacitor CLI 8.5.3 selects Swift Package Manager by default. Both workflows now pass `--packagemanager CocoaPods`, matching their existing Xcode workspace commands, and check that the generated Podfile exists.
+
+Multiline build steps now stop on command failure. Pod installation runs in a subshell, preventing the privacy script from being called in `ios/App` after a failed install. The Ruby helper also locates its repository relative to itself and reads the same package version as the Python helper.
+
+Source review confirmed both workflows retain their bundle ID, signing integration, build-number source and publishing configuration. This correction changes build configuration and documentation; the web app and standalone HTML are unchanged.
+
+**16 focused shell scenarios passed** against the actual YAML for both workflows. Isolated command stubs verified the CocoaPods argument; stopping after failed generation, missing Podfile, failed synchronization, failed Pod installation, failed app tests or failed package checks; and correct working directories and command order on success. YAML parsing and Bash syntax checks passed for all eleven script blocks, and the existing package gate passed for all 122 release files.
+
+Those shell scenarios verify control flow using stubs. They do not execute Capacitor, CocoaPods, Ruby, Xcode, signing or an Apple upload. The corrected package still requires a new Codemagic run for native build verification.
 
 ## Practical limits
 
-The bundled `UPDATE.cmd` has been reviewed for source-folder handling, manifest copying and Git failure handling. This environment cannot execute Windows CMD; the launcher has not been run on Windows and no live GitHub upload was performed here.
+The bundled `UPDATE.cmd` has been reviewed for source-folder handling, manifest copying and Git failure handling. The user's 19 October screenshot confirms a successful Windows upload to GitHub. This environment cannot execute Windows CMD, and no live GitHub upload was performed here.
 
 The current UI checks use DOM, storage and FormData adapters. They do not demonstrate browser rendering, native form validation, focus behavior, an accessibility tree or physical iPhone behavior. Responsive styles and keyboard focus indicators are included, but browser/device visual QA was not available in this environment.
 

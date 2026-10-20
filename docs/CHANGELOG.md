@@ -1,5 +1,6 @@
 # Build 12 — October 2026
 
+- **20 October iOS build correction:** both Codemagic workflows explicitly generate CocoaPods projects, check for the Podfile and stop on failed commands. Pod installation keeps its directory change in a subshell so the privacy step runs from the repository root. The privacy helper locates its own repository and uses the package version for Xcode settings.
 - Packages **UPDATE.cmd** for a short Windows upload command from any extracted folder, with a release file list and a normal push to the existing GitHub repository.
 
 - Adds Today & families as the starting screen with Attendance, Going home, Schoolwork & grades, Dates & forms, Messages & calls, and Help & school info.

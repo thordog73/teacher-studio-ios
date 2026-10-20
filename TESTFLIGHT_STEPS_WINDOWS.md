@@ -6,6 +6,8 @@ This is the shortest **Windows-first** deployment path. The downloaded ZIP conta
 
 Extract **teacher-studio-build12-testflight.zip** into any convenient folder. It contains the upload launcher beside `package.json` and `codemagic.yaml`.
 
+**20 October correction:** this package fixes the missing `Podfile` failure in both iOS workflows. After running the launcher, choose **Start new build** from the updated **main** branch so Codemagic uses the corrected source.
+
 Double-click **UPDATE.cmd**, or run this from Command Prompt in that extracted folder:
 
 ```cmd
@@ -35,7 +37,7 @@ Under App Store Connect **Users and Access → Integrations → App Store Connec
 5. Run the **`ios-compile-check`** workflow first. Resolve any compiler, Xcode, CocoaPods or signing issues it reports. This step does not upload to Apple.
 6. Run **`ios-testflight`**. It builds an IPA, signs it, uploads it to App Store Connect, and requests TestFlight processing.
 
-The generated Xcode project is created by `npx cap add ios` **on Codemagic's Mac**. No checked-in native iOS project is needed for this workflow. Dependences download at build time; installed app content runs offline.
+The generated Xcode project is created by `npx cap add ios --packagemanager CocoaPods` **on Codemagic's Mac**. The explicit package manager creates the `Podfile` and Xcode workspace used by this pipeline. No checked-in native iOS project is needed for this workflow. Dependencies download at build time; installed app content runs offline.
 
 ## 4. Distribute via TestFlight
 
@@ -66,5 +68,6 @@ Do **not** share your signing key or private credentials in chat. Share redacted
 - https://docs.codemagic.io/yaml-quick-start/building-an-ionic-app/
 - https://docs.codemagic.io/yaml-code-signing/signing-ios/
 - https://capacitorjs.com/docs/ios
+- https://capacitorjs.com/docs/updating/8-0
 - https://developer.apple.com/help/app-store-connect/test-a-beta-version/testflight-overview/
 - https://developer.apple.com/help/app-store-connect/manage-app-information/overview-of-export-compliance

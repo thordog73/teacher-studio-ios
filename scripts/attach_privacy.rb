@@ -1,5 +1,8 @@
 require 'xcodeproj'
-pth='ios/App/App.xcodeproj'
+require 'json'
+root=File.expand_path('..',__dir__)
+version=JSON.parse(File.read(File.join(root,'package.json'))).fetch('version')
+pth=File.join(root,'ios/App/App.xcodeproj')
 prj=Xcodeproj::Project.open(pth)
 t=prj.targets.find{|target| target.name=='App'}
 raise 'Missing App target' unless t
@@ -7,7 +10,7 @@ base=prj.main_group.find_subpath('App',true)
 file=base.files.find{|f| f.path=='PrivacyInfo.xcprivacy'} || base.new_file('PrivacyInfo.xcprivacy')
 t.build_configurations.each do |bc|
   bc.build_settings['CURRENT_PROJECT_VERSION'] = ENV.fetch('PROJECT_BUILD_NUMBER', '1')
-  bc.build_settings['MARKETING_VERSION'] = '1.0.0'
+  bc.build_settings['MARKETING_VERSION'] = version
 end
 phase=t.resources_build_phase
 phase.add_file_reference(file,true) unless phase.files_references.include?(file)
