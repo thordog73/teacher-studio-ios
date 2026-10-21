@@ -2,25 +2,27 @@
 
 This is the shortest **Windows-first** deployment path. The downloaded ZIP contains **source code**, not a signed `.ipa`.
 
-## 1. Update your existing GitHub repository
+## 1. Upload and start TestFlight
 
-Extract **teacher-studio-build12-testflight.zip** into any convenient folder. It contains the upload launcher beside `package.json` and `codemagic.yaml`.
-
-**20 October correction:** this package fixes the missing `Podfile` failure in both iOS workflows. After running the launcher, choose **Start new build** from the updated **main** branch so Codemagic uses the corrected source.
-
-Double-click **UPDATE.cmd**, or run this from Command Prompt in that extracted folder:
+Extract **teacher-studio-build12-testflight.zip** into any convenient folder. Keep the full package together. Double-click **UPDATE.cmd**, or run this from Command Prompt in that extracted folder:
 
 ```cmd
 UPDATE.cmd
 ```
 
-The launcher uses its own location, so it does not depend on an old folder name or the Downloads path. It clones the existing `main` branch of `https://github.com/thordog73/teacher-studio-ios.git` into a temporary folder, copies the shipped files listed in `UPDATE-FILES.txt`, commits the update if necessary, and performs a normal push to `main`. It preserves repository history and stops on an error. A successful update opens Codemagic.
+That is the normal upload command. It pushes the included source to the existing GitHub repository, starts the signed **ios-testflight** workflow through the Codemagic API, and prints the build link. There is no routine Codemagic website step.
 
-The existing repository and Git for Windows must be available. Complete Git's normal sign-in prompt if it appears. No new repository or local npm/iOS build is needed for this update.
+Use your existing Codemagic API token if the command window asks. The prompt hides the token and does not save it. If your existing environment already supplies `CM_API_TOKEN`, `CODEMAGIC_API_TOKEN` or `CODEMAGIC_TOKEN`, the launcher uses that instead. Use the token in the command window, not in the app source or chat.
 
-In Codemagic, open the application connected to **teacher-studio-ios**, choose **Start new build**, branch **main**, workflow **ios-testflight**. This package retains manual build initiation; uploading source does not itself start TestFlight processing.
+Git for Windows and Node.js 18 or newer must be installed. Complete Git's normal sign-in prompt if it appears. No local npm installation or iOS build is needed. The launcher uses its own folder, clones `https://github.com/thordog73/teacher-studio-ios.git` into a temporary folder, copies only the shipped release files, commits when needed and performs a normal push to `main`.
 
-The following sections describe the Apple/Codemagic setup for accounts where it has not yet been completed. Existing configured accounts can keep that setup.
+The automatic step checks the exact GitHub repository and uploaded commit, finds the existing Codemagic application, and requests **ios-testflight** on **main**. It keeps a nonsecret record under your local application-data folder so running the command again can reuse the current build. An uncertain network response is checked before another request is allowed. It does not create another Codemagic app or change your Apple signing setup.
+
+**21 October upload update:** the launcher now starts the build automatically, like the other app launchers. The **20 October CocoaPods correction** remains included and fixes the previously reported missing `Podfile` and privacy-script directory errors.
+
+A build link confirms that Codemagic accepted the request. The cloud build must still compile, sign and upload successfully, and Apple must process the upload before it is ready in TestFlight.
+
+The following sections are setup reference for accounts where Apple or Codemagic configuration is incomplete. Existing configured accounts keep their current setup.
 
 ## 2. Register the iOS app in Apple
 
@@ -34,8 +36,8 @@ Under App Store Connect **Users and Access → Integrations → App Store Connec
 2. Create an App Store Connect integration named **`TeacherStudioASC`** (or change the integration name in `codemagic.yaml` to what you choose).
 3. **For a fictional connected pilot**, set Codemagic environment variables `TEACHER_STUDIO_SUPABASE_URL` and `TEACHER_STUDIO_SUPABASE_PUBLISHABLE_KEY` to the project URL and **publishable** key of your isolated Supabase project. Read `PILOT_SECURITY_TESTS.md` and run the SQL migrations first. This prevents parents from entering database settings manually. Never embed a secret/service-role key; without these values the app runs as a local fictional-data demo.
 4. Under code signing, configure an **Apple Distribution certificate** and **App Store provisioning profile** for the exact bundle ID; Codemagic can help create/fetch them through its Apple integration.
-5. Run the **`ios-compile-check`** workflow first. Resolve any compiler, Xcode, CocoaPods or signing issues it reports. This step does not upload to Apple.
-6. Run **`ios-testflight`**. It builds an IPA, signs it, uploads it to App Store Connect, and requests TestFlight processing.
+5. The **`ios-compile-check`** workflow is available for an optional unsigned simulator check when diagnosing a native compilation problem. It does not upload to Apple.
+6. For routine uploads, use **`UPDATE.cmd`**. It starts **`ios-testflight`**, which builds an IPA, signs it, uploads it to App Store Connect, and requests TestFlight processing.
 
 The generated Xcode project is created by `npx cap add ios --packagemanager CocoaPods` **on Codemagic's Mac**. The explicit package manager creates the `Podfile` and Xcode workspace used by this pipeline. No checked-in native iOS project is needed for this workflow. Dependencies download at build time; installed app content runs offline.
 
@@ -52,9 +54,15 @@ In App Store Connect, select **Teacher Studio → TestFlight** and complete all 
 - School-data disclosures, account deletion/access rights and reviewer access as relevant if online login is enabled.
 - Explain that the app has offline maths/worksheet/productivity features and native iOS encrypted-backup file sharing—it's not just a static website.
 
-## 6. If your build fails
+## 6. Check a build or handle a failed request
 
-Download the Codemagic logs. Common causes:
+To check the most recently saved request without uploading or starting a build, use `UPDATE.cmd --status`. A repeated normal `UPDATE.cmd` checks a build already associated with the uploaded commit and avoids starting a duplicate. The helper only reports the Codemagic status it can verify; a finished build is not a substitute for checking Apple's separate TestFlight processing and review state.
+
+If Codemagic reports that the last attempt failed, was cancelled, timed out or was skipped, fix the reported cause. Run the normal command to upload a source correction. If the fix was only in the existing signing/account configuration and the source did not change, `UPDATE.cmd --retry` requests another build only after the helper verifies the previous attempt ended unsuccessfully. It does not override an in-progress, successful or unresolved request.
+
+If the connection drops while starting a build, keep the printed message and run the status check; do not delete the saved state to force another request. The launcher preserves uncertain requests because Codemagic may have accepted them before the connection failed.
+
+Use the printed build link when logs are needed. Common causes:
 - Wrong integration reference `TeacherStudioASC` / Apple API key permissions.
 - Bundle ID mismatch across Apple / `capacitor.config.json` / `codemagic.yaml`.
 - Missing Distribution certificate or App Store provisioning profile.
@@ -65,6 +73,9 @@ Do **not** share your signing key or private credentials in chat. Share redacted
 
 ## Verified public references
 
+- https://docs.codemagic.io/rest-api/builds/
+- https://docs.codemagic.io/integrations/jenkins-integration/
+- https://codemagic.io/api/v3/schema
 - https://docs.codemagic.io/yaml-quick-start/building-an-ionic-app/
 - https://docs.codemagic.io/yaml-code-signing/signing-ios/
 - https://capacitorjs.com/docs/ios

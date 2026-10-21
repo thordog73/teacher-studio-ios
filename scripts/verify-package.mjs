@@ -35,6 +35,7 @@ if(config.appId!=='com.frontofus.teacherstudio'||config.webDir!=='www')throw Err
 if(pkg.version!=='1.2.0'||!app.includes('Build 12'))throw Error('Build 12 displayed/package version mismatch');
 if(!existsSync(join(root,'scripts/build-standalone.mjs'))||!pkg.scripts['build:standalone'])throw Error('Missing standalone generator command');
 if(!pkg.scripts['test:communication']?.includes('communication-model.test.cjs')||!pkg.scripts['test:communication']?.includes('communication-ui.test.cjs'))throw Error('Missing communication verification commands');
+if(!pkg.scripts['test:upload']?.includes('tests/testflight-launcher.test.cjs')||!pkg.scripts.test.includes('test:upload'))throw Error('Missing automatic uploader test command');
 const pipeline=read('codemagic.yaml');
 for(const name of ['ios-compile-check','ios-testflight','com.frontofus.teacherstudio']){
  if(!pipeline.includes(name))throw Error('Missing preserved Codemagic workflow or identity: '+name);
@@ -51,7 +52,7 @@ for(const name of releaseFiles){
  releaseSet.add(name.toLowerCase());
  if(!existsSync(join(root,name))||!lstatSync(join(root,name)).isFile())throw Error('Release file is missing or is not a regular file: '+name);
 }
-for(const name of ['UPDATE.cmd','UPDATE-FILES.txt','README.md','TESTFLIGHT_STEPS_WINDOWS.md','.gitignore','package.json','package-lock.json','capacitor.config.json','codemagic.yaml','web/index.html','web/communication.css',...required.map(name=>'web/'+name)]){
+for(const name of ['UPDATE.cmd','UPDATE-FILES.txt','scripts/start-testflight.cjs','tests/testflight-launcher.test.cjs','README.md','TESTFLIGHT_STEPS_WINDOWS.md','.gitignore','package.json','package-lock.json','capacitor.config.json','codemagic.yaml','web/index.html','web/communication.css',...required.map(name=>'web/'+name)]){
  if(!releaseSet.has(name.toLowerCase()))throw Error('Required file is omitted from the Windows update: '+name);
 }
 console.log('Packaging checks passed: Build 12 Today, Family Desk assets/order, inherited tools, offline source, native backup bridge, iOS pipeline and '+releaseFiles.length+' Windows update files are wired.');

@@ -1,6 +1,6 @@
-# Teacher Studio iOS — App Store Connect / TestFlight. Set exact App Store Connect
-# integration name and bundle identifier before running a signed workflow.
-# First run ios-compile-check, then ios-testflight.
+# Teacher Studio iOS — App Store Connect / TestFlight.
+# UPDATE.cmd starts ios-testflight through the Codemagic API.
+# The existing TeacherStudioASC integration supplies Apple signing and publishing.
 workflows:
   ios-compile-check:
     name: Teacher Studio - iOS compile check (unsigned)
@@ -54,6 +54,16 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
+      - name: Verify uploaded source and app identity
+        script: |
+          set -euo pipefail
+          if [ -n "${TEACHER_STUDIO_EXPECTED_COMMIT:-}" ]; then
+            if [ "$(git rev-parse HEAD)" != "$TEACHER_STUDIO_EXPECTED_COMMIT" ]; then
+              echo "GitHub source changed after upload. Run UPDATE.cmd again." >&2
+              exit 1
+            fi
+          fi
+          node -e 'const c = require("./capacitor.config.json"); if (c.appId !== "com.frontofus.teacherstudio") { console.error("Teacher Studio bundle identifier does not match the signed workflow."); process.exit(1); }'
       - name: Install dependencies
         script: npm install --no-fund --no-audit
       - name: Verify tests and create offline web assets

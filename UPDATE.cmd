@@ -5,12 +5,53 @@ set "TS_REPO=https://github.com/thordog73/teacher-studio-ios.git"
 set "TS_MANIFEST=%~dp0UPDATE-FILES.txt"
 set "TS_RESULT=1"
 set "TS_NOPAUSE="
-if /i "%~1"=="/nopause" set "TS_NOPAUSE=1"
+set "TS_STATUS="
+set "TS_RETRY="
 
-echo Teacher Studio Build 12 - GitHub updater
+:options
+if "%~1"=="" goto start_update
+if /i "%~1"=="/nopause" (
+  set "TS_NOPAUSE=1"
+  shift
+  goto options
+)
+if /i "%~1"=="--status" (
+  set "TS_STATUS=1"
+  shift
+  goto options
+)
+if /i "%~1"=="--retry" (
+  set "TS_RETRY=--retry"
+  shift
+  goto options
+)
+set "TS_ERROR=Unknown option. Run UPDATE.cmd for the normal upload."
+goto failed
+
+:start_update
+if defined TS_STATUS if defined TS_RETRY (
+  set "TS_ERROR=Use --status or --retry separately."
+  goto failed
+)
+echo Teacher Studio Build 12 - Upload and start TestFlight
 echo Source: "%TS_SOURCE%"
 echo.
-echo [1/5] Checking this source package and Git...
+where node >nul 2>nul
+if errorlevel 1 (
+  set "TS_ERROR=Node.js was not found. Install the current Node.js LTS, then run UPDATE.cmd again."
+  goto failed
+)
+node -e "if(Number(process.versions.node.split('.')[0])<18)process.exit(1)" >nul 2>nul
+if errorlevel 1 (
+  set "TS_ERROR=This launcher needs Node.js 18 or newer. Install the current Node.js LTS."
+  goto failed
+)
+if not exist "%TS_SOURCE%scripts\start-testflight.cjs" (
+  set "TS_ERROR=The extracted package is incomplete. Missing: scripts\start-testflight.cjs"
+  goto failed
+)
+if defined TS_STATUS goto check_status
+echo [1/6] Checking this source package and Git...
 where git >nul 2>nul
 if errorlevel 1 (
   set "TS_ERROR=Git was not found. Install Git for Windows, then run UPDATE.cmd again."
@@ -29,7 +70,7 @@ if not errorlevel 1 (
   set "TS_ERROR=The release file list contains an unsupported path. Extract the complete ZIP again."
   goto failed
 )
-for %%F in (package.json codemagic.yaml web/app.js UPDATE.cmd UPDATE-FILES.txt) do (
+for %%F in (package.json codemagic.yaml web/app.js UPDATE.cmd UPDATE-FILES.txt scripts/start-testflight.cjs) do (
   findstr /l /x /c:"%%F" "%TS_MANIFEST%" >nul
   if errorlevel 1 (
     set "TS_ERROR=The release file list is incomplete. Missing: %%F"
@@ -55,7 +96,7 @@ if errorlevel 1 (
   goto failed
 )
 set "TS_CHECKOUT=%TS_WORK%\repo"
-echo [2/5] Downloading the existing main branch. Git may request GitHub sign-in.
+echo [2/6] Downloading the existing main branch. Git may request GitHub sign-in.
 git -c core.symlinks=false clone --branch main --single-branch "%TS_REPO%" "%TS_CHECKOUT%"
 if errorlevel 1 (
   set "TS_ERROR=Git clone failed. No update was pushed. See the Git message above."
@@ -77,13 +118,13 @@ if not errorlevel 1 (
   goto failed
 )
 
-echo [3/5] Copying only files named in UPDATE-FILES.txt...
+echo [3/6] Copying only files named in UPDATE-FILES.txt...
 for /f "usebackq delims=" %%F in ("%TS_MANIFEST%") do (
   set "TS_ENTRY=%%F"
   call :copy_file
   if errorlevel 1 goto failed
 )
-echo [4/5] Preparing the update commit...
+echo [4/6] Preparing the update commit...
 git -C "%TS_CHECKOUT%" add --pathspec-from-file="%TS_MANIFEST%"
 if errorlevel 1 (
   set "TS_ERROR=Git could not stage the release files. No update was pushed."
@@ -102,18 +143,26 @@ if errorlevel 1 (
 )
 
 :push_update
-echo [5/5] Pushing main to the existing repository...
+echo [5/6] Pushing main to the existing repository...
 git -C "%TS_CHECKOUT%" push origin main
 if errorlevel 1 (
   set "TS_ERROR=Git push failed. No force push was attempted. Keep the output above for diagnosis."
   goto failed
 )
 echo.
-echo SUCCESS: The Build 12 source is on GitHub main.
-echo In Codemagic, select this app, Start new build, main, and ios-testflight.
-echo GitHub upload does not by itself run the Apple build.
+echo The Build 12 source is on GitHub main.
+echo [6/6] Starting the signed TestFlight build...
+node "%TS_SOURCE%scripts\start-testflight.cjs" --checkout "%TS_CHECKOUT%" %TS_RETRY%
+if errorlevel 1 (
+  set "TS_ERROR=The source is on GitHub, but the build request needs attention. See the message above."
+  goto failed
+)
 set "TS_RESULT=0"
-start "" "https://codemagic.io/apps"
+goto finished
+
+:check_status
+node "%TS_SOURCE%scripts\start-testflight.cjs" --status
+set "TS_RESULT=%ERRORLEVEL%"
 goto finished
 
 :check_file

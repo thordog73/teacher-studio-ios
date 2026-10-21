@@ -10,9 +10,11 @@ Extract the complete ZIP into any folder, then double-click **UPDATE.cmd**. From
 UPDATE.cmd
 ```
 
-The included launcher finds its own folder, downloads the current `main` branch of **thordog73/teacher-studio-ios** into a temporary working folder, copies the files listed in `UPDATE-FILES.txt`, commits the update when needed and pushes it to the same repository. Existing Git history is retained. It opens Codemagic after a successful upload; select **main → ios-testflight** to start the signed build.
+The included launcher uploads this source to the existing **thordog73/teacher-studio-ios** repository, then starts **ios-testflight** automatically and prints the build link. You do not need to open Codemagic to start the build. Use the same Codemagic API token you use with your other apps if the command window asks; the prompt hides what you paste and the launcher does not save the token.
 
-Git for Windows must already be available, as with the other app upload commands. Git may use its normal sign-in prompt. Dependency installation, tests and iOS compilation run in Codemagic. The launcher stops if a required step fails and leaves the temporary checkout available for diagnosis.
+Git for Windows and Node.js 18 or newer must be available, as with the other app upload commands. Git may use its normal sign-in prompt. The launcher finds its own folder, clones the current `main` branch into a temporary working folder, copies the release files, commits only when needed and performs a normal push. Existing Git history is retained. Dependency installation, tests, signing and iOS compilation run in Codemagic using the existing `TeacherStudioASC` integration.
+
+The command checks the repository and uploaded commit before starting the build. It remembers the nonsecret build ID outside the extracted app so a repeat run can show an existing build instead of starting the same one twice. A submitted build request is the start of the cloud build; Apple availability follows successful compilation, signing, upload and Apple processing. The launcher stops with a specific message when a required step fails.
 
 The release file list prevents unrelated files placed next to the app from being swept into the update. Keep the complete extracted package together; the launcher checks that the listed files are present before it uploads anything.
 
@@ -63,8 +65,9 @@ npm run build:standalone
 npm run build
 ```
 
-- `npm run test` runs the inherited math, cloud mock, encryption, native-share and family-visibility tests, followed by the new communication model and UI tests.
+- `npm run test` runs the inherited math, cloud mock, encryption, native-share and family-visibility tests, followed by the communication model, UI and mocked upload-launcher tests.
 - `npm run test:communication` runs just the new communication tests.
+- `npm run test:upload` verifies the launch helper with mocked Git, API, token and state adapters; it cannot start a live build.
 - `npm run test:package` checks the Today hook, ordered assets, service-worker asset list, app identity, retained iOS workflow and complete, safe Windows update file entries.
 - `npm run build:standalone` regenerates `standalone-demo.html` directly from `web/index.html`, inlining local CSS and scripts in order. It requires no dependency installation and includes the browser native-sharing stub.
 - `npm run build` creates `www/` and bundles the existing Capacitor Filesystem/Share bridge locally. No CDN is needed at runtime.
@@ -80,7 +83,7 @@ The **20 October iOS build correction** explicitly generates a CocoaPods project
 - `ios-compile-check` creates and compiles an unsigned iOS Simulator application on a Codemagic macOS builder.
 - `ios-testflight` uses the existing `TeacherStudioASC` integration and signing configuration to archive and submit to TestFlight when run in the configured account.
 
-Follow `TESTFLIGHT_STEPS_WINDOWS.md` for the existing pipeline setup. This package contains source and an offline HTML demo; no signed `.ipa`, physical iPhone validation or TestFlight upload is claimed.
+Follow `TESTFLIGHT_STEPS_WINDOWS.md` for the one-command upload, status checks and existing pipeline setup. This package contains source and an offline HTML demo; no signed `.ipa`, physical iPhone validation or TestFlight upload is claimed.
 
 ## Files and preserved behavior
 

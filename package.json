@@ -6,9 +6,10 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:standalone": "node scripts/build-standalone.mjs",
-    "test": "node tests/math.test.js && node tests/cloud.test.js && node tests/storage-crypto.test.cjs && node tests/native-share.test.cjs && node tests/family-build11.test.cjs && npm run test:communication",
+    "test": "node tests/math.test.js && node tests/cloud.test.js && node tests/storage-crypto.test.cjs && node tests/native-share.test.cjs && node tests/family-build11.test.cjs && npm run test:communication && npm run test:upload",
     "test:communication": "node tests/communication-model.test.cjs && node tests/communication-ui.test.cjs",
-    "test:package": "node scripts/verify-package.mjs"
+    "test:package": "node scripts/verify-package.mjs",
+    "test:upload": "node tests/testflight-launcher.test.cjs"
   },
   "dependencies": {
     "@capacitor/core": "^8.0.0",

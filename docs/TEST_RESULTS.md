@@ -1,6 +1,6 @@
 # Teacher Studio Build 12 — Verification
 
-Application verification: 2026-10-19 · iOS build correction: 2026-10-20 · application version 1.2.0
+Application verification: 2026-10-19 · iOS build correction: 2026-10-20 · automatic upload update: 2026-10-21 · application version 1.2.0
 
 ## Current automated results
 
@@ -26,9 +26,19 @@ Source review confirmed both workflows retain their bundle ID, signing integrati
 
 Those shell scenarios verify control flow using stubs. They do not execute Capacitor, CocoaPods, Ruby, Xcode, signing or an Apple upload. The corrected package still requires a new Codemagic run for native build verification.
 
+## Automatic TestFlight launcher — 21 October
+
+`UPDATE.cmd` now calls the bundled Node helper after a successful normal Git push. The helper uses the documented Codemagic API to locate the existing app, start `ios-testflight` on `main`, and print the accepted build's link. Its token prompt is hidden, and request state contains only nonsecret build identifiers and source information outside the extracted app. Status checks do not upload source.
+
+The signed workflow now checks `TEACHER_STUDIO_EXPECTED_COMMIT` against the checked-out commit and validates `com.frontofus.teacherstudio` before installing dependencies. **Five focused guard scenarios passed**: matching source, changed source, a manual workflow without an expected commit, wrong bundle identity and Git failure. All **twelve** current YAML script blocks parse and pass Bash syntax checks. The Apple integration, dynamic build-number source and TestFlight publishing settings remain unchanged.
+
+**29/29 launcher behavior checks passed** through `npm run test:upload`. They cover exact repository/commit targeting, ambiguous apps, private token handling, durable intent before submission, active/completed-build reuse, failed-build retry, uncertain network responses, delayed build visibility, and status checks without a checkout. The retry regression specifically checks that an old failed build cannot replace the record of a newer unconfirmed request. The package gate passed for all **124 release files**.
+
+These tests use injected Git, API, token and state adapters with real HTTP and subprocess execution disabled. They verify request behavior without contacting GitHub, Codemagic or Apple. They do not execute the production filesystem lock or a real terminal token prompt. The Windows batch wrapper has been reviewed; it cannot be executed in this Linux environment. The earlier screenshot verifies the Git-upload portion of the previous wrapper, not this newly added automatic-start step.
+
 ## Practical limits
 
-The bundled `UPDATE.cmd` has been reviewed for source-folder handling, manifest copying and Git failure handling. The user's 19 October screenshot confirms a successful Windows upload to GitHub. This environment cannot execute Windows CMD, and no live GitHub upload was performed here.
+The bundled `UPDATE.cmd` has been reviewed for source-folder handling, manifest copying and Git failure handling. The user's 19 October screenshot confirms a successful Windows upload to GitHub. This environment cannot execute Windows CMD, and no live GitHub upload, authenticated Codemagic request or Apple build was performed here.
 
 The current UI checks use DOM, storage and FormData adapters. They do not demonstrate browser rendering, native form validation, focus behavior, an accessibility tree or physical iPhone behavior. Responsive styles and keyboard focus indicators are included, but browser/device visual QA was not available in this environment.
 

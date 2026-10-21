@@ -28,6 +28,7 @@ scripts/build-standalone.mjs
 scripts/build.mjs
 scripts/native-bridge.mjs
 scripts/prepare_ios.py
+scripts/start-testflight.cjs
 scripts/verify-package.mjs
 standalone-demo.html
 supabase/DEPLOYMENT_CHECKLIST.md
@@ -54,6 +55,7 @@ tests/space-smoke.py
 tests/standalone-smoke.py
 tests/storage-crypto.test.cjs
 tests/storage-ui-smoke.py
+tests/testflight-launcher.test.cjs
 tests/ui-smoke.py
 web/app.js
 web/assets/build11-mobile-teacher.png

@@ -1,7 +1,9 @@
 # Build 12 — October 2026
 
+- **21 October one-command TestFlight upload:** `UPDATE.cmd` now starts the existing signed Codemagic workflow immediately after the GitHub push. The included Node helper verifies the repository and commit, accepts the existing API token privately, prints the build link, and keeps nonsecret request state to avoid duplicate or uncertain retries. The signed workflow checks the uploaded commit and app identity before installing dependencies.
+
 - **20 October iOS build correction:** both Codemagic workflows explicitly generate CocoaPods projects, check for the Podfile and stop on failed commands. Pod installation keeps its directory change in a subshell so the privacy step runs from the repository root. The privacy helper locates its own repository and uses the package version for Xcode settings.
-- Packages **UPDATE.cmd** for a short Windows upload command from any extracted folder, with a release file list and a normal push to the existing GitHub repository.
+- Packages **UPDATE.cmd** for a short Windows upload command from any extracted folder, with a release file list, a normal push to the existing GitHub repository and automatic TestFlight build initiation.
 
 - Adds Today & families as the starting screen with Attendance, Going home, Schoolwork & grades, Dates & forms, Messages & calls, and Help & school info.
 - Adds teacher follow-up views for own actions, waiting work and completed requests, ordered by requested date. The full queue keeps every item reachable.
