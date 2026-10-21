@@ -30,11 +30,19 @@ Those shell scenarios verify control flow using stubs. They do not execute Capac
 
 `UPDATE.cmd` now calls the bundled Node helper after a successful normal Git push. The helper uses the documented Codemagic API to locate the existing app, start `ios-testflight` on `main`, and print the accepted build's link. Its token prompt is hidden, and request state contains only nonsecret build identifiers and source information outside the extracted app. Status checks do not upload source.
 
-The signed workflow now checks `TEACHER_STUDIO_EXPECTED_COMMIT` against the checked-out commit and validates `com.frontofus.teacherstudio` before installing dependencies. **Five focused guard scenarios passed**: matching source, changed source, a manual workflow without an expected commit, wrong bundle identity and Git failure. All **twelve** current YAML script blocks parse and pass Bash syntax checks. The Apple integration, dynamic build-number source and TestFlight publishing settings remain unchanged.
+The signed workflow now checks `TEACHER_STUDIO_EXPECTED_COMMIT` against the checked-out commit and validates `com.frontofus.teacherstudio` before installing dependencies. **Five focused guard scenarios passed**: matching source, changed source, a manual workflow without an expected commit, wrong bundle identity and Git failure. All **twelve** current YAML script blocks parse and pass Bash syntax checks. The automatic-upload change retained the then-configured Apple integration, dynamic build-number source and TestFlight publishing settings. The subsequent connection-name correction is recorded below.
 
 **29/29 launcher behavior checks passed** through `npm run test:upload`. They cover exact repository/commit targeting, ambiguous apps, private token handling, durable intent before submission, active/completed-build reuse, failed-build retry, uncertain network responses, delayed build visibility, and status checks without a checkout. The retry regression specifically checks that an old failed build cannot replace the record of a newer unconfirmed request. The package gate passed for all **124 release files**.
 
 These tests use injected Git, API, token and state adapters with real HTTP and subprocess execution disabled. They verify request behavior without contacting GitHub, Codemagic or Apple. They do not execute the production filesystem lock or a real terminal token prompt. The Windows batch wrapper has been reviewed; it cannot be executed in this Linux environment. The earlier screenshot verifies the Git-upload portion of the previous wrapper, not this newly added automatic-start step.
+
+## Apple connection correction — 21 October
+
+The user's signed-build detail screenshot reports: **App Store Connect integration "TeacherStudioASC" does not exist**. This identifies a missing named Apple connection during workflow setup; it is not a compiler or upload error. Earlier app setup records name the existing integration **`ten-minute-wins-apple`**, including an earlier recommendation to reuse it for Teacher Studio.
+
+The corrected YAML now references that existing connection. The bundle ID `com.frontofus.teacherstudio`, app-store profile selection, workflow name `ios-testflight`, expected-commit guard and TestFlight publishing options are retained. The upload command is still `UPDATE.cmd`; a normal run uploads this configuration correction and starts the new source revision.
+
+YAML structure and the package gate were checked for this correction. No application source, upload-helper logic or signing credentials were changed. The previous 29 mocked uploader tests remain applicable; this connection-name change was not tested against a signed-in Codemagic account. A new cloud run is required to verify access to the shared connection and the remaining Apple signing/upload steps.
 
 ## Practical limits
 

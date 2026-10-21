@@ -1,6 +1,6 @@
 # Teacher Studio iOS — App Store Connect / TestFlight.
 # UPDATE.cmd starts ios-testflight through the Codemagic API.
-# The existing TeacherStudioASC integration supplies Apple signing and publishing.
+# The shared ten-minute-wins-apple integration supplies Apple signing and publishing.
 workflows:
   ios-compile-check:
     name: Teacher Studio - iOS compile check (unsigned)
@@ -45,7 +45,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 120
     integrations:
-      app_store_connect: TeacherStudioASC # Must match integration name in Codemagic
+      app_store_connect: ten-minute-wins-apple # Existing shared Apple connection; keep Teacher Studio bundle ID below
     environment:
       ios_signing:
         distribution_type: app_store

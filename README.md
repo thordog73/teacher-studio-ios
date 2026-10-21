@@ -12,7 +12,7 @@ UPDATE.cmd
 
 The included launcher uploads this source to the existing **thordog73/teacher-studio-ios** repository, then starts **ios-testflight** automatically and prints the build link. You do not need to open Codemagic to start the build. Use the same Codemagic API token you use with your other apps if the command window asks; the prompt hides what you paste and the launcher does not save the token.
 
-Git for Windows and Node.js 18 or newer must be available, as with the other app upload commands. Git may use its normal sign-in prompt. The launcher finds its own folder, clones the current `main` branch into a temporary working folder, copies the release files, commits only when needed and performs a normal push. Existing Git history is retained. Dependency installation, tests, signing and iOS compilation run in Codemagic using the existing `TeacherStudioASC` integration.
+Git for Windows and Node.js 18 or newer must be available, as with the other app upload commands. Git may use its normal sign-in prompt. The launcher finds its own folder, clones the current `main` branch into a temporary working folder, copies the release files, commits only when needed and performs a normal push. Existing Git history is retained. Dependency installation, tests, signing and iOS compilation run in Codemagic using the existing `ten-minute-wins-apple` integration.
 
 The command checks the repository and uploaded commit before starting the build. It remembers the nonsecret build ID outside the extracted app so a repeat run can show an existing build instead of starting the same one twice. A submitted build request is the start of the cloud build; Apple availability follows successful compilation, signing, upload and Apple processing. The launcher stops with a specific message when a required step fails.
 
@@ -78,10 +78,12 @@ Source tests and a web build do not establish that an Apple build has compiled o
 
 The app identifier remains **`com.frontofus.teacherstudio`**. Both native preparation helpers read **1.2.0** from `package.json` and retain the dynamic build number. Capacitor dependencies, iOS sharing configuration, workflow names and Apple publishing settings are preserved.
 
+The **21 October Apple connection correction** uses the existing **`ten-minute-wins-apple`** App Store Connect integration from the other app setup. This replaces the missing `TeacherStudioASC` reference that prevented the signed build from starting. Teacher Studio keeps its own `com.frontofus.teacherstudio` bundle ID and app-specific signing profile selection.
+
 The **20 October iOS build correction** explicitly generates a CocoaPods project for the existing Xcode workspace commands. Both workflows stop when a required command fails, and Pod installation runs in its own directory without moving the following privacy step out of the repository root. This corrects the reported missing `Podfile` and cascading privacy-script path error.
 
 - `ios-compile-check` creates and compiles an unsigned iOS Simulator application on a Codemagic macOS builder.
-- `ios-testflight` uses the existing `TeacherStudioASC` integration and signing configuration to archive and submit to TestFlight when run in the configured account.
+- `ios-testflight` uses the existing `ten-minute-wins-apple` integration and signing configuration to archive and submit to TestFlight when run in the configured account.
 
 Follow `TESTFLIGHT_STEPS_WINDOWS.md` for the one-command upload, status checks and existing pipeline setup. This package contains source and an offline HTML demo; no signed `.ipa`, physical iPhone validation or TestFlight upload is claimed.
 

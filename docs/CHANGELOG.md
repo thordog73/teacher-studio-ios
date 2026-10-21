@@ -1,5 +1,7 @@
 # Build 12 — October 2026
 
+- **21 October Apple connection correction:** replace the nonexistent `TeacherStudioASC` integration reference with the existing `ten-minute-wins-apple` connection recorded in the other app setup. Keep Teacher Studio's own bundle ID, app-specific profile selection and signed TestFlight publishing workflow.
+
 - **21 October one-command TestFlight upload:** `UPDATE.cmd` now starts the existing signed Codemagic workflow immediately after the GitHub push. The included Node helper verifies the repository and commit, accepts the existing API token privately, prints the build link, and keeps nonsecret request state to avoid duplicate or uncertain retries. The signed workflow checks the uploaded commit and app identity before installing dependencies.
 
 - **20 October iOS build correction:** both Codemagic workflows explicitly generate CocoaPods projects, check for the Podfile and stop on failed commands. Pod installation keeps its directory change in a subshell so the privacy step runs from the repository root. The privacy helper locates its own repository and uses the package version for Xcode settings.

@@ -18,6 +18,8 @@ Git for Windows and Node.js 18 or newer must be installed. Complete Git's normal
 
 The automatic step checks the exact GitHub repository and uploaded commit, finds the existing Codemagic application, and requests **ios-testflight** on **main**. It keeps a nonsecret record under your local application-data folder so running the command again can reuse the current build. An uncertain network response is checked before another request is allowed. It does not create another Codemagic app or change your Apple signing setup.
 
+**21 October Apple connection fix:** the signed workflow now uses the existing **`ten-minute-wins-apple`** integration. It replaces the missing `TeacherStudioASC` name shown in the failed build. Extract this corrected ZIP and run the normal **`UPDATE.cmd`** command; it uploads the corrected configuration and starts a new build.
+
 **21 October upload update:** the launcher now starts the build automatically, like the other app launchers. The **20 October CocoaPods correction** remains included and fixes the previously reported missing `Podfile` and privacy-script directory errors.
 
 A build link confirms that Codemagic accepted the request. The cloud build must still compile, sign and upload successfully, and Apple must process the upload before it is ready in TestFlight.
@@ -33,7 +35,7 @@ Under App Store Connect **Users and Access → Integrations → App Store Connec
 ## 3. Connect Codemagic
 
 1. In Codemagic, add the GitHub repository as an application and choose the repository's `codemagic.yaml`.
-2. Create an App Store Connect integration named **`TeacherStudioASC`** (or change the integration name in `codemagic.yaml` to what you choose).
+2. Reuse the existing App Store Connect integration **`ten-minute-wins-apple`**, matching the name in `codemagic.yaml`. This is the shared Apple connection from the other apps. Teacher Studio keeps its own bundle ID and provisioning profile; those identifiers are not copied from another app.
 3. **For a fictional connected pilot**, set Codemagic environment variables `TEACHER_STUDIO_SUPABASE_URL` and `TEACHER_STUDIO_SUPABASE_PUBLISHABLE_KEY` to the project URL and **publishable** key of your isolated Supabase project. Read `PILOT_SECURITY_TESTS.md` and run the SQL migrations first. This prevents parents from entering database settings manually. Never embed a secret/service-role key; without these values the app runs as a local fictional-data demo.
 4. Under code signing, configure an **Apple Distribution certificate** and **App Store provisioning profile** for the exact bundle ID; Codemagic can help create/fetch them through its Apple integration.
 5. The **`ios-compile-check`** workflow is available for an optional unsigned simulator check when diagnosing a native compilation problem. It does not upload to Apple.
@@ -63,7 +65,7 @@ If Codemagic reports that the last attempt failed, was cancelled, timed out or w
 If the connection drops while starting a build, keep the printed message and run the status check; do not delete the saved state to force another request. The launcher preserves uncertain requests because Codemagic may have accepted them before the connection failed.
 
 Use the printed build link when logs are needed. Common causes:
-- Wrong integration reference `TeacherStudioASC` / Apple API key permissions.
+- The existing `ten-minute-wins-apple` integration is unavailable to the Codemagic account/team running this app, or its Apple API key lacks access.
 - Bundle ID mismatch across Apple / `capacitor.config.json` / `codemagic.yaml`.
 - Missing Distribution certificate or App Store provisioning profile.
 - Network dependency/npm/pod download failure on the macOS builder.
